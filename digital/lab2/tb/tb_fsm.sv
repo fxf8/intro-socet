@@ -1,5 +1,4 @@
 module tb_fsm;
-    
     /*
     * SystemVerilog allows the use of custom datatypes in both
     * synthesizable RTL code and test code. Below we define a
@@ -21,19 +20,25 @@ module tb_fsm;
     // Clock generation
     always #(10) CLK++;
 
-    
     // TODO: Instantiate the FSM module
-    
     /*
     *  A task acts like a function, or a macro,
     *  to allow parameterizable code reuse in the
     *  testbench. SystemVerilog has both tasks and
     *  functions. The main difference is: tasks
     *  are allowed to take up time while functions
-    *  are not, and functions have return values like 
+    *  are not, and functions have return values like
     *  to procedural languages while tasks require
     *  use of input/output ports.
     */
+
+    fsm DUT (
+        .CLK(CLK),
+        .nRST(nRST),
+        .data(tb_data),
+        .accept(tb_accept)
+    );
+
     task reset();
     begin
         nRST = 1'b0;
@@ -79,11 +84,14 @@ module tb_fsm;
         reset();
 
         // TODO: Execute the test here
+        foreach (vec.data_stream[i]) begin
+            send_bit(vec.data_stream[i]);
+        end
 
         #(1); // Delay to ensure sample after output changes
         // Check outputs & display pass/fail messages
         if(tb_accept != vec.expected_output) begin
-            $display("Time %t: [FAILED] Test %d failed on input %d; Expected %b, got %b\n", 
+            $display("Time %t: [FAILED] Test %d failed on input %d; Expected %b, got %b\n",
                         $time, vec.test_number, vec.data_stream, vec.expected_output, tb_accept);
         end else begin
             $display("Time %t: [PASSED] Test %d passed.\n", $time, vec.test_number);
@@ -100,6 +108,10 @@ module tb_fsm;
         logic expected
     );
         TestVector vec;
+
+        vec.test_number = test_counter;
+        vec.data_stream = test_data;
+        vec.expected_output = expected;
 
         test_counter++; // Increment test counter for next call to gen_test
         return vec;
@@ -120,13 +132,19 @@ module tb_fsm;
         $timeformat(-9, 2, " ns", 20); // Set formatting for printing time
 
         // Generate test cases
-        tests = new[3]; // Create dynamically sized array 
+        tests = new[8]; // Create dynamically sized array
         tests[0] = gen_test(8'd5, 1'b1); // 5 should be divisible by 5!
         tests[1] = gen_test(8'd1, 1'b0); // 1 is not divisible by 5
         tests[2] = gen_test(8'd255, 1'b1); // 255 is divisible by 5
 
         // TODO: Create a couple more test cases. Make sure to change the
         // size of the array on the line with the call to "new[3]"!
+        tests[3] = gen_test(8'd0, 1'b1); // 0 is divisible by 5
+        tests[4] = gen_test(8'd10, 1'b1); // 10 is divisible by 5
+        tests[5] = gen_test(8'd21, 1'b0); // 21 is not divisible by 5
+        tests[6] = gen_test(8'd125, 1'b1); // 125 is divisible by 5
+        tests[7] = gen_test(8'd133, 1'b0); // 133 is not divisible by 5
+
 
         // Run the reset task
         reset();
@@ -134,7 +152,7 @@ module tb_fsm;
         // TODO: Run your test cases by looping through the array and calling
         // your "send_stream" task! Don't forget to reset between calls, or
         // your FSM won't start in the correct state.
-        for(int i = 0; i < 3; i++) begin
+        for(int i = 0; i < 8; i++) begin
             send_stream(tests[i]);
         end
         // Signal simulation to stop, all tests complete

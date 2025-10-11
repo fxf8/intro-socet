@@ -32,9 +32,25 @@ module fsm(
     always_comb begin
         // Your code here
         // You may find the SystemVerilog 'casez' statement helpful here
+
+        case ({state, data})
+            {S0, 1'b0}: next = S0;
+            {S0, 1'b1}: next = S1;
+            {S1, 1'b0}: next = S2;
+            {S1, 1'b1}: next = S3;
+            {S2, 1'b0}: next = S4;
+            {S2, 1'b1}: next = S0;
+            {S3, 1'b0}: next = S1;
+            {S3, 1'b1}: next = S2;
+            {S4, 1'b0}: next = S3;
+            {S4, 1'b1}: next = S4;
+
+            default: next = S0;
+        endcase
     end
 
     // Output logic
     // your code here
 
+    assign accept = (state == S0);
 endmodule

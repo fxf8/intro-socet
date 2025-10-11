@@ -1,6 +1,5 @@
 
 module tb_eight_bit_adder();
-    
     localparam DELAY = 10;
 
     // TB <-> DUT connections
@@ -31,6 +30,19 @@ module tb_eight_bit_adder();
 
         // YOUR CODE HERE
 
+        a = in_a;
+        b = in_b;
+        expected = a + b;
+
+        #DELAY;
+
+        if (c != expected) begin
+            $display("Test case failed: %0d + %0d = %0d (expected %0d)", in_a, in_b, c, expected);
+        end else begin
+            $display("Test case passed: %0d + %0d = %0d", in_a, in_b, c);
+            num_passed += 1;
+        end
+
         num_tests += 1;
 
     endtask
@@ -46,19 +58,26 @@ module tb_eight_bit_adder();
         // Running *every* test case for this would not scale well!
         // 2^16 input combinations for an 8-bit adder! (now recall your 64b computer)
         // We have to run subsets of the entire test that *cover* what we're interested in.
-        
         // TODO: Pick out some interesting test cases and run them here. What are
         // some corner cases?
+
+        apply_inputs(0, 0, 0);
+        apply_inputs(255, 255, 510);
+        apply_inputs(255, 0, 255);
+        apply_inputs(0, 255, 255);
 
         // Run 1000 random test cases
         for(int i = 0; i < 1000; i++) begin
             bit [31:0] in_a = $urandom_range(255);
             bit [31:0] in_b = $urandom_range(255);
             bit [31:0] expected = in_a + in_b;
-            apply_inputs(in_a[7:0], in_b[7:0], expected[8:0]);
+            logic [31:0] result;
+            $display("Running test case %0d: %0d + %0d = %0d", i, in_a, in_b, expected);
+            apply_inputs(in_a[7:0], in_b[7:0], result[8:0]);
         end
 
         $display("Passed %0d/%0d tests.", num_passed, num_tests);
         $finish();
     end
 endmodule
+
