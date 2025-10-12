@@ -1,0 +1,33 @@
+digraph "fsm" {
+label="fsm";
+rankdir="LR";
+remincross=true;
+n6 [ shape=diamond, label="next", color="black", fontcolor="black"];
+n7 [ shape=diamond, label="state", color="black", fontcolor="black"];
+n8 [ shape=octagon, label="accept", color="black", fontcolor="black"];
+n9 [ shape=octagon, label="data", color="black", fontcolor="black"];
+n10 [ shape=octagon, label="nRST", color="black", fontcolor="black"];
+n11 [ shape=octagon, label="CLK", color="black", fontcolor="black"];
+v0 [ label="3'000" ];
+c15 [ shape=record, label="{{<p12> A|<p13> B}|$4\n$eq|{<p14> Y}}",  ];
+c16 [ shape=record, label="{{<p12> A}|$2\n$logic_not|{<p14> Y}}",  ];
+x2 [ shape=record, style=rounded, label="<s1> 2:0 - 3:1 |<s0> 0:0 - 0:0 ", color="black", fontcolor="black" ];
+p1 [shape=box, style=rounded, label="PROC $3\nsrc/fsm.sv:0.0-0.0", ];
+p3 [shape=box, style=rounded, label="PROC $1\nsrc/fsm.sv:23.5-29.8", ];
+x4 [shape=point, ];
+c15:p14:e -> x4:w [color="black", fontcolor="black", label=""];
+n10:e -> c16:p12:w [color="black", fontcolor="black", label=""];
+n10:e -> p3:w [color="black", fontcolor="black", label=""];
+n11:e -> p3:w [color="black", fontcolor="black", label=""];
+c16:p14:e -> p3:w [color="black", fontcolor="black", label=""];
+p1:e -> n6:w [color="black", fontcolor="black", style="setlinewidth(3)", label=""];
+n6:e -> p3:w [color="black", fontcolor="black", style="setlinewidth(3)", label=""];
+p3:e -> n7:w [color="black", fontcolor="black", style="setlinewidth(3)", label=""];
+n7:e -> c15:p12:w [color="black", fontcolor="black", style="setlinewidth(3)", label=""];
+n7:e -> p3:w [color="black", fontcolor="black", style="setlinewidth(3)", label=""];
+n7:e -> x2:s1:w [color="black", fontcolor="black", style="setlinewidth(3)", label=""];
+x4:e -> n8:w [color="black", fontcolor="black", label=""];
+n9:e -> x2:s0:w [color="black", fontcolor="black", label=""];
+v0:e -> c15:p13:w [color="black", fontcolor="black", style="setlinewidth(3)", label=""];
+x2:e -> p1:w [color="black", fontcolor="black", style="setlinewidth(3)", label=""];
+}
