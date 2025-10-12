@@ -30,3 +30,5 @@ module counter (
     end
   end
 endmodule
+
+// Name: Rajin Braynard

@@ -47,6 +47,8 @@ module tb_eight_bit_adder();
 
     endtask
 
+    // Name: Rajin Braynard
+
     initial begin
         $dumpfile("waveform.fst");
         $dumpvars;

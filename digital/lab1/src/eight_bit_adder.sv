@@ -40,3 +40,4 @@ module eight_bit_adder(
     endgenerate
 endmodule
 
+// Name: Rajin Braynard
