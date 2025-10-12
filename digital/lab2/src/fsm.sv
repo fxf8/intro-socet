@@ -53,4 +53,6 @@ module fsm(
     // your code here
 
     assign accept = (state == S0);
+
+    // Name: Rajin Braynard
 endmodule

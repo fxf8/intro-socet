@@ -65,6 +65,8 @@ module tb_fsm;
     end
     endtask
 
+    // Name: Rajin Braynard
+
     // TODO: Fill in the task code to
     // send a stream of data.
     // Code is provided to check output and to print error messages
@@ -99,6 +101,8 @@ module tb_fsm;
     end
     endtask
 
+    // Name: Rajin Braynard
+
     // TODO: create a new test vector using the TB
     // test_counter variable, and the function parameters.
     // Hint: Check the definition of the TestVector data structure
@@ -116,6 +120,8 @@ module tb_fsm;
         test_counter++; // Increment test counter for next call to gen_test
         return vec;
     endfunction
+
+    // Name: Rajin Braynard
 
     // Start the testbench
     initial begin
@@ -158,6 +164,4 @@ module tb_fsm;
         // Signal simulation to stop, all tests complete
         $finish();
     end
-
-
 endmodule
